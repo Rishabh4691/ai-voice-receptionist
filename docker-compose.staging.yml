@@ -1,0 +1,21 @@
+name: ai-reception-staging
+
+services:
+  api:
+    build: .
+    container_name: ai-reception-staging
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3041:3000"
+    volumes:
+      - ./data-staging:/app/data
+    env_file:
+      - /home/kanal/secrets/voice-bot-staging.env
+    environment:
+      - PORT=3000
+      - NODE_ENV=staging
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

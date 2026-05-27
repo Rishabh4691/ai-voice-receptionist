@@ -1,0 +1,21 @@
+name: ai-reception-prod
+
+services:
+  api:
+    build: .
+    container_name: ai-reception-prod
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3042:3000"
+    volumes:
+      - ./data-prod:/app/data
+    env_file:
+      - /home/kanal/secrets/voice-bot-prod.env
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
